@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08111f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NHL Manager">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>NHL Manager DE</title>
+<style>
+:root{--bg:#08111f;--card:#101b2b;--card2:#142237;--text:#edf4ff;--muted:#91a4bd;--accent:#6ca8ff;--danger:#ff6678;--ok:#57d99b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#173354 0,#08111f 45%);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}button,select,input{font:inherit}button{border:0;border-radius:12px;padding:12px 15px;background:#213754;color:white;font-weight:700}button.primary{background:var(--accent);color:#06101e}button.danger{background:#522432}.app{max-width:1100px;margin:auto;padding-bottom:88px}.top{position:sticky;top:0;z-index:10;background:rgba(8,17,31,.92);backdrop-filter:blur(16px);padding:14px 16px;border-bottom:1px solid #23344d}.toprow{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#6ca8ff,#253b62);display:grid;place-items:center;font-weight:900}.top h1{font-size:18px;margin:0}.top small{color:var(--muted)}main{padding:16px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid #243650;border-radius:18px;padding:16px;box-shadow:0 12px 30px #0003}.hero{padding:20px}.muted{color:var(--muted)}.big{font-size:28px;font-weight:900}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.wrap{flex-wrap:wrap}.tabs{display:flex;gap:8px;overflow:auto;padding:10px 0}.tabs button.active{background:var(--accent);color:#06101e}.list{display:grid;gap:9px}.player{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#243957;font-weight:900}.badge{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:900;border:2px solid #fff3}.bar{height:7px;border-radius:9px;background:#26364e;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}.score{font-size:20px;font-weight:900}.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,17,31,.96);backdrop-filter:blur(18px);border-top:1px solid #243650;z-index:20}.navin{max-width:1100px;margin:auto;display:grid;grid-template-columns:repeat(6,1fr)}.nav button{background:none;border-radius:0;padding:10px 4px;color:var(--muted);font-size:11px}.nav button.active{color:#fff}.nav span{display:block;font-size:21px;margin-bottom:3px}.modal{position:fixed;inset:0;background:#0009;z-index:30;display:grid;place-items:end}.sheet{width:min(720px,100%);max-height:90vh;overflow:auto;background:#101b2b;border-radius:24px 24px 0 0;padding:20px}.hide{display:none}.form{display:grid;gap:12px}select,input{background:#0b1626;border:1px solid #314561;color:#fff;padding:13px;border-radius:12px;width:100%}.pill{padding:6px 9px;border-radius:999px;background:#233754;color:#bcd2ed;font-size:12px}.success{color:var(--ok)}.dangerText{color:var(--danger)}@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}main{padding:12px}.card{border-radius:15px;padding:14px}.hideMobile{display:none}.player{grid-template-columns:40px 1fr auto}.badge{width:38px;height:38px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const TEAMS=[{"id": "ANA", "name": "Anaheim Ducks", "c1": "#FC4C02", "c2": "#85714D"}, {"id": "BOS", "name": "Boston Bruins", "c1": "#FFB81C", "c2": "#000000"}, {"id": "BUF", "name": "Buffalo Sabres", "c1": "#003087", "c2": "#FCB514"}, {"id": "CGY", "name": "Calgary Flames", "c1": "#C8102E", "c2": "#F1BE48"}, {"id": "CAR", "name": "Carolina Hurricanes", "c1": "#CC0000", "c2": "#000000"}, {"id": "CHI", "name": "Chicago Blackhawks", "c1": "#CF0A2C", "c2": "#000000"}, {"id": "COL", "name": "Colorado Avalanche", "c1": "#6F263D", "c2": "#236192"}, {"id": "CBJ", "name": "Columbus Blue Jackets", "c1": "#002654", "c2": "#CE1126"}, {"id": "DAL", "name": "Dallas Stars", "c1": "#006847", "c2": "#8F8F8C"}, {"id": "DET", "name": "Detroit Red Wings", "c1": "#CE1126", "c2": "#FFFFFF"}, {"id": "EDM", "name": "Edmonton Oilers", "c1": "#041E42", "c2": "#FF4C00"}, {"id": "FLA", "name": "Florida Panthers", "c1": "#041E42", "c2": "#C8102E"}, {"id": "LAK", "name": "Los Angeles Kings", "c1": "#111111", "c2": "#A2AAAD"}, {"id": "MIN", "name": "Minnesota Wild", "c1": "#154734", "c2": "#A6192E"}, {"id": "MTL", "name": "Montréal Canadiens", "c1": "#AF1E2D", "c2": "#192168"}, {"id": "NSH", "name": "Nashville Predators", "c1": "#FFB81C", "c2": "#041E42"}, {"id": "NJD", "name": "New Jersey Devils", "c1": "#CE1126", "c2": "#000000"}, {"id": "NYI", "name": "New York Islanders", "c1": "#00539B", "c2": "#F47D30"}, {"id": "NYR", "name": "New York Rangers", "c1": "#0038A8", "c2": "#CE1126"}, {"id": "OTT", "name": "Ottawa Senators", "c1": "#C52032", "c2": "#C8A44D"}, {"id": "PHI", "name": "Philadelphia Flyers", "c1": "#F74902", "c2": "#000000"}, {"id": "PIT", "name": "Pittsburgh Penguins", "c1": "#FCB514", "c2": "#000000"}, {"id": "SJS", "name": "San Jose Sharks", "c1": "#006D75", "c2": "#EA7200"}, {"id": "SEA", "name": "Seattle Kraken", "c1": "#001628", "c2": "#99D9DD"}, {"id": "STL", "name": "St. Louis Blues", "c1": "#002F87", "c2": "#FCB514"}, {"id": "TBL", "name": "Tampa Bay Lightning", "c1": "#002868", "c2": "#FFFFFF"}, {"id": "TOR", "name": "Toronto Maple Leafs", "c1": "#00205B", "c2": "#FFFFFF"}, {"id": "UTA", "name": "Utah Mammoth", "c1": "#010101", "c2": "#68A2B9"}, {"id": "VAN", "name": "Vancouver Canucks", "c1": "#001F5B", "c2": "#00843D"}, {"id": "VGK", "name": "Vegas Golden Knights", "c1": "#B4975A", "c2": "#333F42"}, {"id": "WPG", "name": "Winnipeg Jets", "c1": "#041E42", "c2": "#AC162C"}, {"id": "WSH", "name": "Washington Capitals", "c1": "#041E42", "c2": "#C8102E"}];
+const NAMES=["Connor McDavid", "Leon Draisaitl", "Nathan MacKinnon", "Auston Matthews", "Cale Makar", "Sidney Crosby", "Aleksander Barkov", "David Pastrnak", "Jack Hughes", "Elias Pettersson", "Quinn Hughes", "Mikko Rantanen", "Kirill Kaprizov", "Artemi Panarin", "Nikita Kucherov", "Brady Tkachuk", "Matthew Tkachuk", "Mitch Marner", "William Nylander", "Jason Robertson", "Sebastian Aho", "Andrei Svechnikov", "Tage Thompson", "Rasmus Dahlin", "Moritz Seider", "Lucas Raymond", "Tim Stützle", "Jake Sanderson", "Cole Caufield", "Nick Suzuki", "Juraj Slafkovsky", "Jack Eichel", "Mark Stone", "Alex Ovechkin", "Dylan Strome", "John Carlson", "Kyle Connor", "Mark Scheifele", "Connor Hellebuyck", "Roman Josi", "Filip Forsberg", "Juuse Saros", "Evan Bouchard", "Zach Hyman", "Ryan Nugent-Hopkins", "Adam Fox", "Igor Shesterkin", "Artemi Panarin", "Miro Heiskanen", "Jason Robertson", "Roope Hintz", "Mason Marchment", "Mackenzie Weegar", "MacKenzie Blackwood", "Mats Zuccarello", "Kirill Marchenko", "Adam Fantilli", "Dylan Larkin", "Alex DeBrincat", "Moritz Seider", "Jordan Kyrou", "Robert Thomas", "Jordan Binnington", "Tomas Hertl", "Logan Couture", "Matty Beniers", "Jared McCann", "Eeli Tolvanen", "Jordan Eberle", "Mark Scheifele", "Josh Morrissey", "Kyle Palmieri", "Bo Horvat", "Brock Nelson", "Charlie McAvoy", "Jeremy Swayman"];
+const POS=['Center','Linker Flügel','Rechter Flügel','Verteidiger','Torwart'];
+const KEY='nhl_manager_web_v2';
+let state=load()||newGame('EDM','Mittel');
+let page='home';
+
+function rnd(n){return Math.floor(Math.random()*n)}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function team(id){return TEAMS.find(t=>t.id===id)||TEAMS[0]}
+function money(x){return (x/1e6).toFixed(1)+' M€'}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function playerName(i){return NAMES[i%NAMES.length]}
+function newPlayer(id,teamId,i,prospect=false){
+  let base=prospect?62+rnd(12):68+rnd(18);
+  let p={id,name:playerName(i)+((i>=NAMES.length)?' Jr.':''),teamId,pos:POS[i%5],age:prospect?18+rnd(4):21+rnd(15),
+    shot:clamp(base+rnd(9),45,98),pass:clamp(base+rnd(9),45,98),speed:clamp(base+rnd(9),45,98),
+    tech:clamp(base+rnd(9),45,98),def:clamp(base+rnd(9),45,98),phys:clamp(base+rnd(9),45,98),
+    pot:clamp(prospect?78+rnd(18):base+rnd(9),55,99),morale:70+rnd(31),
+    salary:prospect?950000+rnd(400000):1000000+rnd(8500000),years:1+rnd(5),
+    goals:0,assists:0,gp:0,saves:0,shotsAgainst:0,pim:0,injured:0,suspended:0,prospect,farm:prospect,
+    ntc:!prospect&&Math.random()<.08,mntc:!prospect&&Math.random()<.12};
+  p.ovr=Math.round((p.shot+p.pass+p.speed+p.tech+p.def+p.phys)/6); return p
+}
+function newGame(user='EDM',difficulty='Mittel'){
+  let players=[], n=0;
+  TEAMS.forEach(t=>{for(let i=0;i<10;i++)players.push(newPlayer(t.id+'_'+i,t.id,n++,false));for(let i=0;i<5;i++)players.push(newPlayer(t.id+'_p'+i,t.id,n++,true))});
+  return {season:2026,round:0,user,difficulty,players,standings:Object.fromEntries(TEAMS.map(t=>[t.id,{g:0,w:0,l:0,p:0,gf:0,ga:0}])),
+    finance:Object.fromEntries(TEAMS.map(t=>[t.id,{cash:15000000,cap:88000000,ticket:75,sponsor:6000000,merch:3000000,stadium:1}])),
+    tactics:Object.fromEntries(TEAMS.map(t=>[t.id,{attack:.5,fore:.5,pp:.5,pk:.5,goalie:1}])),
+    history:[],events:['Willkommen. Baue deine Dynastie auf.'],champion:'',awards:'',playoff:false,playoffTeams:[]}
+}
+function strength(id){let a=state.players.filter(p=>p.teamId===id&&!p.farm);return a.length?a.reduce((s,p)=>s+p.ovr*(p.morale/100),0)/a.length:60}
+function fixture(){
+  let opp=TEAMS[(TEAMS.findIndex(t=>t.id===state.user)+state.round+1)%TEAMS.length].id;
+  return state.round%2===0?{h:state.user,a:opp}:{h:opp,a:state.user}
+}
+function simGame(h,a,detailed=false){
+  let hs=strength(h),as=strength(a),ht=state.tactics[h],at=state.tactics[a];
+  let diff=state.difficulty==='Leicht'?1.06:state.difficulty==='Schwer'?.96:state.difficulty==='Experte'?.92:1;
+  let hg=goals(hs*diff+(ht.attack-.5)*8+1.5,as),ag=goals(as*(2-diff)+(at.attack-.5)*8,hs);
+  if(hg===ag) Math.random()<.5?hg++:ag++;
+  let hp=state.players.filter(p=>p.teamId===h&&!p.farm&&p.pos!=='Torwart'),ap=state.players.filter(p=>p.teamId===a&&!p.farm&&p.pos!=='Torwart');
+  let ev=detailed?['1. Drittel – hohes Tempo.','2. Drittel – Spezialteams werden wichtig.','3. Drittel – Schlussphase.']: [];
+  for(let i=0;i<hg;i++){let s=hp[rnd(hp.length)],x=hp[rnd(hp.length)];s.goals++;s.gp++;x.assists++;ev.push('TOR '+team(h).name+': '+s.name+' ('+x.name+')')}
+  for(let i=0;i<ag;i++){let s=ap[rnd(ap.length)],x=ap[rnd(ap.length)];s.goals++;s.gp++;x.assists++;ev.push('TOR '+team(a).name+': '+s.name+' ('+x.name+')')}
+  let sh=14+hg+rnd(18),sa=14+ag+rnd(18),hgk=state.players.find(p=>p.teamId===h&&p.pos==='Torwart'),agk=state.players.find(p=>p.teamId===a&&p.pos==='Torwart');
+  if(hgk){hgk.shotsAgainst+=sa;hgk.saves+=sa-ag}
+  if(agk){agk.shotsAgainst+=sh;agk.saves+=sh-hg}
+  let H=state.standings[h],A=state.standings[a];H.g++;A.g++;H.gf+=hg;H.ga+=ag;A.gf+=ag;A.ga+=hg;
+  if(hg>ag){H.w++;H.p+=2;A.l++}else{A.w++;A.p+=2;H.l++}
+  if(Math.random()<.08){let all=[...hp,...ap];let p=all[rnd(all.length)];p.injured=1;ev.push('Verletzung: '+p.name)}
+  if(Math.random()<.12){let all=[...hp,...ap];let p=all[rnd(all.length)];p.pim+=2;if(Math.random()<.03){p.suspended=2;ev.push('Sperre: '+p.name)}}
+  ev.unshift(team(h).name+' '+hg+':'+ag+' '+team(a).name+' · Schüsse '+sh+':'+sa);
+  return {hg,ag,ev}
+}
+function goals(att,def){let exp=clamp(2.1+(att-def)/28,0.5,4.8),g=0;for(let i=0;i<12;i++)if(Math.random()<exp/12)g++;return clamp(g,0,7)}
+function simNext(detailed=false){
+  if(state.round>=84){finishSeason();return}
+  let f=fixture(),r=simGame(f.h,f.a,detailed);state.round++;state.events=r.ev;
+  state.players.forEach(p=>{if(p.suspended>0)p.suspended--;if(p.injured&&Math.random()<.4)p.injured=0});
+  save();render();
+}
+function finishSeason(){
+  let sorted=[...TEAMS].sort((a,b)=>state.standings[b.id].p-state.standings[a.id].p);
+  let qualified=sorted.slice(0,16).map(t=>t.id), pool=qualified.slice();
+  for(let r=0;r<4;r++){let next=[];for(let i=0;i<pool.length;i+=2){let x=pool[i],y=pool[i+1];next.push(strength(x)>=strength(y)?x:y)}pool=next}
+  state.champion=pool[0];state.playoffTeams=qualified;state.playoff=true;
+  let players=[...state.players].sort((a,b)=>(b.goals+b.assists)-(a.goals+a.assists));
+  let mvp=players.find(p=>p.teamId===state.champion)||players[0], rookie=players.filter(p=>p.age<=22).sort((a,b)=>(b.goals+b.assists)-(a.goals+a.assists))[0]||players[0];
+  let goalies=players.filter(p=>p.pos==='Torwart'&&p.shotsAgainst>0).sort((a,b)=>(b.saves/b.shotsAgainst)-(a.saves/a.shotsAgainst));
+  let vez=goalies[0]||players[0], art=players[0];
+  state.awards='MVP: '+mvp.name+' · Rookie: '+rookie.name+' · Vezina: '+vez.name+' · Art Ross: '+art.name;
+  state.history.push({season:state.season,champion:state.champion,mvp:mvp.name,rookie:rookie.name,vezina:vez.name,art:art.name});
+  state.events=['Saison beendet: '+team(state.champion).name+' gewinnt den Stanley Cup.',state.awards];save();render()
+}
+function nextSeason(){
+  state.season++;state.round=0;state.playoff=false;state.champion='';state.awards='';state.playoffTeams=[];
+  Object.values(state.standings).forEach(x=>Object.assign(x,{g:0,w:0,l:0,p:0,gf:0,ga:0}));
+  state.players.forEach(p=>{p.goals=0;p.assists=0;p.gp=0;p.saves=0;p.shotsAgainst=0;p.pim=0;p.age++;p.years=Math.max(0,p.years-1);develop(p)});
+  draft();freeAgency();state.finance[state.user].cash+=state.finance[state.user].sponsor+state.finance[state.user].merch;
+  state.events=['Neue Saison '+state.season+' gestartet.'];save();render()
+}
+function develop(p){let d=p.age<=23?(p.pot-p.ovr)/12:(p.age>=31?-.7:.1);['shot','pass','speed','tech','def','phys'].forEach(k=>p[k]=clamp(Math.round(p[k]+d),40,99));p.ovr=Math.round((p.shot+p.pass+p.speed+p.tech+p.def+p.phys)/6)}
+function draft(){for(let i=0;i<32;i++){let t=TEAMS[i%32].id,p=newPlayer('d'+state.season+i,t,NAMES.length+i,true);p.draftYear=state.season;p.draftRound=1+Math.floor(i/5);state.players.push(p)}}
+function freeAgency(){state.players.filter(p=>p.years===0&&!p.prospect).forEach(p=>{if(Math.random()<.75){p.teamId=TEAMS[rnd(32)].id;p.years=1+rnd(4);p.morale=80}else p.farm=true})}
+function payroll(){return state.players.filter(p=>p.teamId===state.user&&!p.farm).reduce((s,p)=>s+p.salary,0)}
+function signFA(id){let p=state.players.find(p=>p.id===id),f=state.finance[state.user];if(!p||p.years!==0||payroll()+p.salary>f.cap)return false;p.teamId=state.user;p.farm=false;p.years=3;p.morale=88;return true}
+function trade(id,target){let p=state.players.find(p=>p.id===id),cand=state.players.filter(x=>x.teamId===target&&!x.farm&&x.pos!=='Torwart').sort((a,b)=>b.ovr-a.ovr)[0];if(!p||!cand||p.ntc||(p.mntc&&Math.random()>.35))return false;let old=p.teamId;p.teamId=target;cand.teamId=old;return true}
+function upgrade(){let f=state.finance[state.user],cost=2500000*f.stadium;if(f.cash>=cost&&f.stadium<10){f.cash-=cost;f.stadium++;f.sponsor+=350000;save();render()}}
+function setTicket(v){state.finance[state.user].ticket=+v;save();render()}
+function scout(){state.players.filter(p=>p.teamId===state.user&&p.prospect).forEach(p=>{p.pot=clamp(p.pot+2,50,99);p.morale=clamp(p.morale+3,30,100)});save();render()}
+function badge(id){let t=team(id);return `<span class="badge" style="background:linear-gradient(135deg,${t.c1},${t.c2})">${id}</span>`}
+function nav(){return `<div class="nav"><div class="navin">${[['home','🏠','Start'],['roster','👥','Kader'],['market','🔄','Markt'],['league','🏆','Liga'],['money','💶','Finanzen'],['more','☰','Mehr']].map(x=>`<button class="${page===x[0]?'active':''}" onclick="page='${x[0]}';render()"><span>${x[1]}</span>${x[2]}</button>`).join('')}</div></div>`}
+function shell(body){let t=team(state.user),f=state.finance[state.user];return `<div class="app"><header class="top"><div class="toprow">${badge(state.user)}<div><h1>NHL Manager</h1><small>${t.name} · Saison ${state.season}/${state.season+1} · ${state.difficulty}</small></div></div></header><main>${body}</main>${nav()}</div>`}
+function home(){let s=state.standings[state.user],f=state.finance[state.user],fx=fixture();return `<section class="card hero"><div class="row between"><div><div class="muted">Deine Franchise</div><div class="big">${team(state.user).name}</div><div class="muted">Runde ${state.round}/84</div></div>${badge(state.user)}</div></section><div class="grid" style="margin:10px 0"><div class="card"><b>${s.p}</b><div class="muted">Punkte</div></div><div class="card"><b>${s.w}-${s.l}</b><div class="muted">Bilanz</div></div><div class="card"><b>${money(f.cash)}</b><div class="muted">Cash</div></div><div class="card"><b>${money(payroll())}</b><div class="muted">Payroll</div></div></div>${state.round<84?`<section class="card"><h2>Nächstes Spiel</h2><div class="row between">${badge(fx.h)}<div class="score">${team(fx.h).name}<br><span class="muted">vs.</span><br>${team(fx.a).name}</div>${badge(fx.a)}</div><div class="row" style="margin-top:16px"><button class="primary" style="flex:1" onclick="simNext(false)">⚡ Schnell simulieren</button><button style="flex:1" onclick="simNext(true)">📺 Live-Simulation</button></div></section>`:`<section class="card"><h2>🏆 Saison beendet</h2><p>${state.champion?team(state.champion).name+' gewinnt den Stanley Cup.':''}</p><p>${state.awards}</p><button class="primary" onclick="nextSeason()">Neue Saison starten</button></section>`}<section class="card" style="margin-top:10px"><h2>Letzte Ereignisse</h2>${state.events.slice(0,10).map(e=>`<p>${e}</p>`).join('')}</section>`}
+function roster(){let ps=state.players.filter(p=>p.teamId===state.user&&!p.farm).sort((a,b)=>b.ovr-a.ovr);return `<h2>Kader</h2><div class="card"><div class="row between"><b>${ps.length} Spieler</b><span class="pill">Payroll ${money(payroll())} / ${money(state.finance[state.user].cap)}</span></div></div><div class="list" style="margin-top:10px">${ps.map(p=>`<div class="card player"><div class="avatar">${p.ovr}</div><div><b>${p.name}</b><div class="muted">${p.pos} · ${p.age} J. · ${money(p.salary)} · ${p.years} J.</div><div class="row wrap"><span class="pill">Schuss ${p.shot}</span><span class="pill">Passen ${p.pass}</span><span class="pill">Speed ${p.speed}</span><span class="pill">Def ${p.def}</span>${p.ntc?'<span class="pill">NTC</span>':''}</div></div><button onclick="openPlayer('${p.id}')">Details</button></div>`).join('')}</div>`}
+function market(){let fas=state.players.filter(p=>p.years===0&&!p.prospect).sort((a,b)=>b.ovr-a.ovr).slice(0,30);let others=TEAMS.filter(t=>t.id!==state.user);return `<h2>Transfermarkt</h2><div class="card form"><label>Zielteam<select id="target">${others.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select></label></div><h3>Free Agents</h3><div class="list">${fas.map(p=>`<div class="card player"><div class="avatar">${p.ovr}</div><div><b>${p.name}</b><div class="muted">${p.pos} · ${p.age} J. · Forderung ${money(p.salary)}</div></div><button onclick="if(signFA('${p.id}')){save();render()}else alert('Cap Space reicht nicht aus.')">Signieren</button></div>`).join('')}</div><h3>Trade</h3><div class="list">${state.players.filter(p=>p.teamId===state.user&&!p.farm).slice(0,15).map(p=>`<div class="card player"><div class="avatar">${p.ovr}</div><div><b>${p.name}</b><div class="muted">${money(p.salary)} · ${p.ntc?'No-Trade-Klausel':''}</div></div><button onclick="let t=document.getElementById('target').value;if(trade('${p.id}',t)){save();render()}else alert('Trade wurde abgelehnt.')">Trade</button></div>`).join('')}</div>`}
+function league(){let st=TEAMS.map(t=>({t,s:state.standings[t.id]})).sort((a,b)=>b.s.p-a.s.p);let top=[...state.players].sort((a,b)=>(b.goals+b.assists)-(a.goals+a.assists)).slice(0,20);return `<h2>Liga</h2><div class="list">${st.map((x,i)=>`<div class="card row"><b style="width:28px">${i+1}</b>${badge(x.t.id)}<div style="flex:1"><b>${x.t.name}</b><div class="muted">${x.s.w}-${x.s.l} · ${x.s.gf}:${x.s.ga}</div></div><b>${x.s.p} P</b></div>`).join('')}</div><h2>Topscorer</h2><div class="list">${top.map((p,i)=>`<div class="card row"><b>${i+1}</b><div style="flex:1"><b>${p.name}</b><div class="muted">${team(p.teamId).name} · ${p.goals} Tore · ${p.assists} Assists</div></div><b>${p.goals+p.assists}</b></div>`).join('')}</div>`}
+function moneyPage(){let f=state.finance[state.user];return `<h2>Finanzen</h2><div class="grid"><div class="card"><b>${money(f.cash)}</b><div class="muted">Liquidität</div></div><div class="card"><b>${money(f.cap)}</b><div class="muted">Salary Cap</div></div><div class="card"><b>${money(payroll())}</b><div class="muted">Payroll</div></div><div class="card"><b>Stufe ${f.stadium}/10</b><div class="muted">Stadion</div></div></div><div class="card" style="margin-top:10px"><h3>Ticketpreis: ${f.ticket} €</h3><input type="range" min="25" max="180" value="${f.ticket}" oninput="setTicket(this.value)"><p class="muted">Sponsoren ${money(f.sponsor)} · Merchandise ${money(f.merch)}</p><button class="primary" onclick="upgrade()">🏟️ Stadion ausbauen</button></div>`}
+function more(){return `<h2>Mehr</h2><div class="list"><div class="card"><h3>🧠 Taktik</h3><p class="muted">Angriff, Forechecking, Powerplay, Penalty Killing und Torhüterrotation.</p><button onclick="tactics()">Taktik öffnen</button></div><div class="card"><h3>🔎 Scouting & Jugend</h3><p class="muted">Talente entwickeln und Potenzial besser einschätzen.</p><button onclick="scout();alert('Scouting verbessert.')">Scouting intensivieren</button></div><div class="card"><h3>🏆 Playoffs & Historie</h3>${state.playoff?`<p>Stanley Cup: <b>${team(state.champion).name}</b></p><p>${state.awards}</p>`:'<p class="muted">Nach Runde 84 werden die Playoffs ausgewertet.</p>'}${state.history.map(h=>`<p>${h.season}: ${team(h.champion).name} · MVP ${h.mvp}</p>`).join('')}</div><div class="card"><h3>📱 iPhone / PWA</h3><p>Diese Version läuft ohne Flutter direkt als Web-App. Über Safari kannst du sie zum Home-Bildschirm hinzufügen.</p></div><div class="card"><button class="danger" onclick="if(confirm('Lokalen Spielstand löschen?')){localStorage.removeItem(KEY);location.reload()}">Spielstand löschen</button></div></div>`}
+function tactics(){let t=state.tactics[state.user];let v=prompt('Angriff 0–100',Math.round(t.attack*100));if(v!==null)t.attack=clamp(+v/100,0,1);v=prompt('Forechecking 0–100',Math.round(t.fore*100));if(v!==null)t.fore=clamp(+v/100,0,1);v=prompt('Powerplay 0–100',Math.round(t.pp*100));if(v!==null)t.pp=clamp(+v/100,0,1);v=prompt('Penalty Killing 0–100',Math.round(t.pk*100));if(v!==null)t.pk=clamp(+v/100,0,1);save();render()}
+function openPlayer(id){let p=state.players.find(x=>x.id===id);document.getElementById('modal').classList.remove('hide');document.getElementById('sheet').innerHTML=`<div class="row between"><h2>${p.name}</h2><button onclick="closeModal()">✕</button></div><p>${p.pos} · ${p.age} Jahre · OVR <b>${p.ovr}</b></p>${[['Schuss',p.shot],['Passen',p.pass],['Geschwindigkeit',p.speed],['Technik',p.tech],['Defensive',p.def],['Physis',p.phys],['Potenzial',p.pot],['Moral',p.morale]].map(x=>`<p>${x[0]} <b>${x[1]}</b></p><div class="bar"><i style="width:${x[1]}%"></i></div>`).join('')}<p>Vertrag: ${p.years} Jahre · ${money(p.salary)}</p>`}
+function closeModal(){document.getElementById('modal').classList.add('hide')}
+function render(){let body=page==='home'?home():page==='roster'?roster():page==='market'?market():page==='league'?league():page==='money'?moneyPage():more();document.getElementById('app').innerHTML=shell(body)+`<div id="modal" class="modal hide"><div id="sheet" class="sheet"></div></div>`}
+render();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script>
+</body></html>
